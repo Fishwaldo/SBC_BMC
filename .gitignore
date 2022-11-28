@@ -1,6 +1,8 @@
 .pio
 build/*
 dependencies.lock
-sdkconfig
 .vscode/*
-
+sdkconfig
+sdkconfig.defaults
+sdkconfig.esp32
+sdkconfig.esp32s3

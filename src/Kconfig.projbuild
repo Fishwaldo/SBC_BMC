@@ -127,7 +127,7 @@ menu "Github OTA Configuration"
 
     config GITHUB_REPO
         string "The Repository of the Github Repository"
-        default "esp_ghota"
+        default "SBC_BMC"
         help
             The Repository of the Github Repository
 
