@@ -1,0 +1,47 @@
+syntax = "proto3";
+
+//import "nanopb.proto";
+
+package espmsg;
+
+option go_package = "pkg/espmsg";
+
+enum EspMsgType {
+    OpInvalid = 0;
+    OPSetPerf = 1;
+    OPSetDuty = 2;
+    OPGetStatus = 3;
+}
+
+message SetPerf {
+    double temp = 1;
+    double load = 2;
+}
+
+message SetDuty {
+    double duty = 1;
+}
+
+message EspMsg {
+    EspMsgType operation = 1;
+    int32 id = 2;
+    oneof op {
+        SetPerf Perf = 3;
+        SetDuty Duty = 4;
+    }
+}
+
+message EspResultStatus {
+    double temp = 1;
+    double load = 2;
+    int32 duty = 3;
+    int32 rpm = 4;
+}
+
+message EspResult {
+    EspMsgType operation = 1;
+    int32 id = 2;
+    oneof op {
+        EspResultStatus Status = 3;
+    }
+}

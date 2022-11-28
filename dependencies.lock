@@ -1,0 +1,15 @@
+dependencies:
+  Fishwaldo/esp_ghota:
+    component_hash: null
+    source:
+      path: C:\Users\justi\Documents\PlatformIO\Projects\esp_ghota
+      type: local
+    version: 1.0.0
+  idf:
+    component_hash: null
+    source:
+      type: idf
+    version: 4.4.2
+manifest_hash: d981dcd02b8461a8a980edab080504d019d8403e74be2571ee017fd08e34bf86
+target: esp32s3
+version: 1.0.0

@@ -1,0 +1,85 @@
+syntax = "proto3";
+
+import "nanopb.proto";
+
+package espmsg;
+
+option go_package = "pkg/espmsg";
+
+enum EspMsgType {
+    OpInvalid = 0;
+    OpInfo = 1;
+    OpLogin = 2;
+    OPSetPerf = 3;
+    OPSetDuty = 4;
+    OPGetStatus = 5;
+    OpGetConfig = 6;
+}
+
+
+message ESPReq_Login {
+    string username = 1;
+    string token = 2;
+}
+
+message ESPReq_SetPerf {
+    float temp = 1;
+    float load = 2;
+}
+
+message ESPReq_SetDuty {
+    float duty = 1;
+}
+
+message EspReq_Msg {
+    EspMsgType operation = 1;
+    int32 id = 2;
+    oneof op {
+        ESPReq_Login Login = 3;
+        ESPReq_SetPerf Perf = 4;
+        ESPReq_SetDuty Duty = 5;
+    }
+}
+
+message ESPResult_Info {
+    int32 version = 1;
+    bytes challenge = 2;
+}
+
+
+message ESPResult_LoginResult {
+    bool success = 1;
+    string result = 2 [(nanopb).max_size = 8];
+}
+
+
+message EspResult_Status {
+    float temp = 1;
+    float load = 2;
+    int32 duty = 3;
+    int32 rpm = 4;
+}
+
+message EspResult_Config_Channel {
+    bool enabled = 1;
+    int32 lowTemp = 2;
+    int32 highTemp = 3;
+    int32 minDuty = 4;
+}
+
+message EspResult_Config {
+    string tz = 1 [(nanopb).max_length = 64];
+    int32 channels = 2;
+    repeated EspResult_Config_Channel CfgConfig = 3;
+}
+
+message EspResult {
+    EspMsgType operation = 1;
+    int32 id = 2;
+    oneof op {
+        ESPResult_Info Info = 3;
+        ESPResult_LoginResult Login = 4;
+        EspResult_Status Status = 5;
+        EspResult_Config Config = 6;
+    }
+}
