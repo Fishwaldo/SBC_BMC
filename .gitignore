@@ -1,2 +1,6 @@
 .pio
 build/*
+dependencies.lock
+sdkconfig
+.vscode/*
+
