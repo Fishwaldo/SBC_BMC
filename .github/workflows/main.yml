@@ -1,0 +1,82 @@
+on:
+  push:
+  pull_request:
+    branches: [master]
+
+permissions:
+  contents: write
+name: Build
+jobs:
+  buildfirmware:
+    strategy:
+      fail-fast: true
+      matrix: 
+        targets: [esp32, esp32s3]
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout repo
+      uses: actions/checkout@v3
+      with:
+        submodules: 'recursive'
+    - name: Cache pip
+      uses: actions/cache@v2
+      with:
+        path: ~/.cache/pip
+        key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+        restore-keys: |
+          ${{ runner.os }}-pip-
+    - name: Cache PlatformIO
+      uses: actions/cache@v2
+      with:
+        path: ~/.platformio
+        key: ${{ runner.os }}-${{ hashFiles('**/lockfiles') }}
+    - name: Set up Python
+      uses: actions/setup-python@v2
+    - name: Install PlatformIO
+      run: |
+        python -m pip install --upgrade pip
+        pip install --upgrade platformio
+    - name: Run PlatformIO
+      run: pio run -e ${{ matrix.targets }}
+    - name: Rename artifact
+      run: |
+        cp .pio/build/${{matrix.targets}}/firmware.bin SBC_BMC-${{ matrix.targets }}.bin        
+    - name: Archive Firmware Files
+      uses: actions/upload-artifact@v3
+      with: 
+        name: ${{ matrix.targets }}-firmware
+        path: "*-${{ matrix.targets }}.bin"
+
+  buildagent:
+    strategy:
+      fail-fast: true
+      matrix: 
+        arch: [arm64, amd64]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-go@v3
+      - run: |
+          cd agent
+          env GOOS=linux GOARCH=${{matrix.arch}} CGO_ENABLED=0 go build -o agent-${{matrix.arch}}
+      - uses: actions/upload-artifact@v3
+        with:
+          name: agent-${{matrix.arch}}
+          path: agent/agent-${{matrix.arch}}
+
+  release:
+    needs: [ buildfirmware, buildagent ]
+    runs-on: ubuntu-latest
+    steps:
+    - name: Download Firmware Files
+      uses: actions/download-artifact@v2
+      with:
+        path: release
+    - name: Release Firmware
+      uses: ncipollo/release-action@v1
+      if: startsWith(github.ref, 'refs/tags/') 
+      with:
+        artifacts: release/*/*
+        generateReleaseNotes: true
+        allowUpdates: true
+        token: ${{ secrets.GITHUB_TOKEN }}

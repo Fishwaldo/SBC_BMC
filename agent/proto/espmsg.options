@@ -1,0 +1,10 @@
+espmsg.ESPReq_Login.username max_length:8
+espmsg.ESPReq_Login.token max_length: 8
+
+espmsg.ESPResult_Info.challenge max_length: 8
+espmsg.ESPResult_Login.result max_length: 8
+
+espmsg.EspResult_Config.timezone: max_length: 32
+espmsg.EspResult_Config.CfgConfig max_count: 6 fixed_count: true
+
+espmsg.EspResult_Config.timezone: max_length: 32

@@ -26,24 +26,33 @@ type EspMsgType int32
 
 const (
 	EspMsgType_OpInvalid   EspMsgType = 0
-	EspMsgType_OPSetPerf   EspMsgType = 1
-	EspMsgType_OPSetDuty   EspMsgType = 2
-	EspMsgType_OPGetStatus EspMsgType = 3
+	EspMsgType_OpInfo      EspMsgType = 1
+	EspMsgType_OpLogin     EspMsgType = 2
+	EspMsgType_OPSetPerf   EspMsgType = 3
+	EspMsgType_OPSetDuty   EspMsgType = 4
+	EspMsgType_OPGetStatus EspMsgType = 5
+	EspMsgType_OpGetConfig EspMsgType = 6
 )
 
 // Enum value maps for EspMsgType.
 var (
 	EspMsgType_name = map[int32]string{
 		0: "OpInvalid",
-		1: "OPSetPerf",
-		2: "OPSetDuty",
-		3: "OPGetStatus",
+		1: "OpInfo",
+		2: "OpLogin",
+		3: "OPSetPerf",
+		4: "OPSetDuty",
+		5: "OPGetStatus",
+		6: "OpGetConfig",
 	}
 	EspMsgType_value = map[string]int32{
 		"OpInvalid":   0,
-		"OPSetPerf":   1,
-		"OPSetDuty":   2,
-		"OPGetStatus": 3,
+		"OpInfo":      1,
+		"OpLogin":     2,
+		"OPSetPerf":   3,
+		"OPSetDuty":   4,
+		"OPGetStatus": 5,
+		"OpGetConfig": 6,
 	}
 )
 
@@ -74,17 +83,17 @@ func (EspMsgType) EnumDescriptor() ([]byte, []int) {
 	return file_proto_espmsg_proto_rawDescGZIP(), []int{0}
 }
 
-type SetPerf struct {
+type ESPReq_Login struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Temp float64 `protobuf:"fixed64,1,opt,name=temp,proto3" json:"temp,omitempty"`
-	Load float64 `protobuf:"fixed64,2,opt,name=load,proto3" json:"load,omitempty"`
+	Username string `protobuf:"bytes,1,opt,name=username,proto3" json:"username,omitempty"`
+	Token    string `protobuf:"bytes,2,opt,name=token,proto3" json:"token,omitempty"`
 }
 
-func (x *SetPerf) Reset() {
-	*x = SetPerf{}
+func (x *ESPReq_Login) Reset() {
+	*x = ESPReq_Login{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_proto_espmsg_proto_msgTypes[0]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -92,13 +101,13 @@ func (x *SetPerf) Reset() {
 	}
 }
 
-func (x *SetPerf) String() string {
+func (x *ESPReq_Login) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*SetPerf) ProtoMessage() {}
+func (*ESPReq_Login) ProtoMessage() {}
 
-func (x *SetPerf) ProtoReflect() protoreflect.Message {
+func (x *ESPReq_Login) ProtoReflect() protoreflect.Message {
 	mi := &file_proto_espmsg_proto_msgTypes[0]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -110,35 +119,36 @@ func (x *SetPerf) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use SetPerf.ProtoReflect.Descriptor instead.
-func (*SetPerf) Descriptor() ([]byte, []int) {
+// Deprecated: Use ESPReq_Login.ProtoReflect.Descriptor instead.
+func (*ESPReq_Login) Descriptor() ([]byte, []int) {
 	return file_proto_espmsg_proto_rawDescGZIP(), []int{0}
 }
 
-func (x *SetPerf) GetTemp() float64 {
+func (x *ESPReq_Login) GetUsername() string {
 	if x != nil {
-		return x.Temp
+		return x.Username
 	}
-	return 0
+	return ""
 }
 
-func (x *SetPerf) GetLoad() float64 {
+func (x *ESPReq_Login) GetToken() string {
 	if x != nil {
-		return x.Load
+		return x.Token
 	}
-	return 0
+	return ""
 }
 
-type SetDuty struct {
+type ESPReq_SetPerf struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Duty float64 `protobuf:"fixed64,1,opt,name=duty,proto3" json:"duty,omitempty"`
+	Temp float32 `protobuf:"fixed32,1,opt,name=temp,proto3" json:"temp,omitempty"`
+	Load float32 `protobuf:"fixed32,2,opt,name=load,proto3" json:"load,omitempty"`
 }
 
-func (x *SetDuty) Reset() {
-	*x = SetDuty{}
+func (x *ESPReq_SetPerf) Reset() {
+	*x = ESPReq_SetPerf{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_proto_espmsg_proto_msgTypes[1]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -146,13 +156,13 @@ func (x *SetDuty) Reset() {
 	}
 }
 
-func (x *SetDuty) String() string {
+func (x *ESPReq_SetPerf) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*SetDuty) ProtoMessage() {}
+func (*ESPReq_SetPerf) ProtoMessage() {}
 
-func (x *SetDuty) ProtoReflect() protoreflect.Message {
+func (x *ESPReq_SetPerf) ProtoReflect() protoreflect.Message {
 	mi := &file_proto_espmsg_proto_msgTypes[1]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -164,33 +174,35 @@ func (x *SetDuty) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use SetDuty.ProtoReflect.Descriptor instead.
-func (*SetDuty) Descriptor() ([]byte, []int) {
+// Deprecated: Use ESPReq_SetPerf.ProtoReflect.Descriptor instead.
+func (*ESPReq_SetPerf) Descriptor() ([]byte, []int) {
 	return file_proto_espmsg_proto_rawDescGZIP(), []int{1}
 }
 
-func (x *SetDuty) GetDuty() float64 {
+func (x *ESPReq_SetPerf) GetTemp() float32 {
 	if x != nil {
-		return x.Duty
+		return x.Temp
 	}
 	return 0
 }
 
-type EspMsg struct {
+func (x *ESPReq_SetPerf) GetLoad() float32 {
+	if x != nil {
+		return x.Load
+	}
+	return 0
+}
+
+type ESPReq_SetDuty struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Operation EspMsgType `protobuf:"varint,1,opt,name=operation,proto3,enum=espmsg.EspMsgType" json:"operation,omitempty"`
-	Id        int32      `protobuf:"varint,2,opt,name=id,proto3" json:"id,omitempty"`
-	// Types that are assignable to Op:
-	//	*EspMsg_Perf
-	//	*EspMsg_Duty
-	Op isEspMsg_Op `protobuf_oneof:"op"`
+	Duty float32 `protobuf:"fixed32,1,opt,name=duty,proto3" json:"duty,omitempty"`
 }
 
-func (x *EspMsg) Reset() {
-	*x = EspMsg{}
+func (x *ESPReq_SetDuty) Reset() {
+	*x = ESPReq_SetDuty{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_proto_espmsg_proto_msgTypes[2]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -198,13 +210,13 @@ func (x *EspMsg) Reset() {
 	}
 }
 
-func (x *EspMsg) String() string {
+func (x *ESPReq_SetDuty) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*EspMsg) ProtoMessage() {}
+func (*ESPReq_SetDuty) ProtoMessage() {}
 
-func (x *EspMsg) ProtoReflect() protoreflect.Message {
+func (x *ESPReq_SetDuty) ProtoReflect() protoreflect.Message {
 	mi := &file_proto_espmsg_proto_msgTypes[2]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -216,75 +228,34 @@ func (x *EspMsg) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use EspMsg.ProtoReflect.Descriptor instead.
-func (*EspMsg) Descriptor() ([]byte, []int) {
+// Deprecated: Use ESPReq_SetDuty.ProtoReflect.Descriptor instead.
+func (*ESPReq_SetDuty) Descriptor() ([]byte, []int) {
 	return file_proto_espmsg_proto_rawDescGZIP(), []int{2}
 }
 
-func (x *EspMsg) GetOperation() EspMsgType {
+func (x *ESPReq_SetDuty) GetDuty() float32 {
 	if x != nil {
-		return x.Operation
-	}
-	return EspMsgType_OpInvalid
-}
-
-func (x *EspMsg) GetId() int32 {
-	if x != nil {
-		return x.Id
+		return x.Duty
 	}
 	return 0
 }
 
-func (m *EspMsg) GetOp() isEspMsg_Op {
-	if m != nil {
-		return m.Op
-	}
-	return nil
-}
-
-func (x *EspMsg) GetPerf() *SetPerf {
-	if x, ok := x.GetOp().(*EspMsg_Perf); ok {
-		return x.Perf
-	}
-	return nil
-}
-
-func (x *EspMsg) GetDuty() *SetDuty {
-	if x, ok := x.GetOp().(*EspMsg_Duty); ok {
-		return x.Duty
-	}
-	return nil
-}
-
-type isEspMsg_Op interface {
-	isEspMsg_Op()
-}
-
-type EspMsg_Perf struct {
-	Perf *SetPerf `protobuf:"bytes,3,opt,name=Perf,proto3,oneof"`
-}
-
-type EspMsg_Duty struct {
-	Duty *SetDuty `protobuf:"bytes,4,opt,name=Duty,proto3,oneof"`
-}
-
-func (*EspMsg_Perf) isEspMsg_Op() {}
-
-func (*EspMsg_Duty) isEspMsg_Op() {}
-
-type EspResultStatus struct {
+type EspReq_Msg struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Temp float64 `protobuf:"fixed64,1,opt,name=temp,proto3" json:"temp,omitempty"`
-	Load float64 `protobuf:"fixed64,2,opt,name=load,proto3" json:"load,omitempty"`
-	Duty int32   `protobuf:"varint,3,opt,name=duty,proto3" json:"duty,omitempty"`
-	Rpm  int32   `protobuf:"varint,4,opt,name=rpm,proto3" json:"rpm,omitempty"`
+	Operation EspMsgType `protobuf:"varint,1,opt,name=operation,proto3,enum=espmsg.EspMsgType" json:"operation,omitempty"`
+	Id        int32      `protobuf:"varint,2,opt,name=id,proto3" json:"id,omitempty"`
+	// Types that are assignable to Op:
+	//	*EspReq_Msg_Login
+	//	*EspReq_Msg_Perf
+	//	*EspReq_Msg_Duty
+	Op isEspReq_Msg_Op `protobuf_oneof:"op"`
 }
 
-func (x *EspResultStatus) Reset() {
-	*x = EspResultStatus{}
+func (x *EspReq_Msg) Reset() {
+	*x = EspReq_Msg{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_proto_espmsg_proto_msgTypes[3]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -292,13 +263,13 @@ func (x *EspResultStatus) Reset() {
 	}
 }
 
-func (x *EspResultStatus) String() string {
+func (x *EspReq_Msg) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*EspResultStatus) ProtoMessage() {}
+func (*EspReq_Msg) ProtoMessage() {}
 
-func (x *EspResultStatus) ProtoReflect() protoreflect.Message {
+func (x *EspReq_Msg) ProtoReflect() protoreflect.Message {
 	mi := &file_proto_espmsg_proto_msgTypes[3]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -310,37 +281,388 @@ func (x *EspResultStatus) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use EspResultStatus.ProtoReflect.Descriptor instead.
-func (*EspResultStatus) Descriptor() ([]byte, []int) {
+// Deprecated: Use EspReq_Msg.ProtoReflect.Descriptor instead.
+func (*EspReq_Msg) Descriptor() ([]byte, []int) {
 	return file_proto_espmsg_proto_rawDescGZIP(), []int{3}
 }
 
-func (x *EspResultStatus) GetTemp() float64 {
+func (x *EspReq_Msg) GetOperation() EspMsgType {
+	if x != nil {
+		return x.Operation
+	}
+	return EspMsgType_OpInvalid
+}
+
+func (x *EspReq_Msg) GetId() int32 {
+	if x != nil {
+		return x.Id
+	}
+	return 0
+}
+
+func (m *EspReq_Msg) GetOp() isEspReq_Msg_Op {
+	if m != nil {
+		return m.Op
+	}
+	return nil
+}
+
+func (x *EspReq_Msg) GetLogin() *ESPReq_Login {
+	if x, ok := x.GetOp().(*EspReq_Msg_Login); ok {
+		return x.Login
+	}
+	return nil
+}
+
+func (x *EspReq_Msg) GetPerf() *ESPReq_SetPerf {
+	if x, ok := x.GetOp().(*EspReq_Msg_Perf); ok {
+		return x.Perf
+	}
+	return nil
+}
+
+func (x *EspReq_Msg) GetDuty() *ESPReq_SetDuty {
+	if x, ok := x.GetOp().(*EspReq_Msg_Duty); ok {
+		return x.Duty
+	}
+	return nil
+}
+
+type isEspReq_Msg_Op interface {
+	isEspReq_Msg_Op()
+}
+
+type EspReq_Msg_Login struct {
+	Login *ESPReq_Login `protobuf:"bytes,3,opt,name=login,proto3,oneof"`
+}
+
+type EspReq_Msg_Perf struct {
+	Perf *ESPReq_SetPerf `protobuf:"bytes,4,opt,name=Perf,proto3,oneof"`
+}
+
+type EspReq_Msg_Duty struct {
+	Duty *ESPReq_SetDuty `protobuf:"bytes,5,opt,name=Duty,proto3,oneof"`
+}
+
+func (*EspReq_Msg_Login) isEspReq_Msg_Op() {}
+
+func (*EspReq_Msg_Perf) isEspReq_Msg_Op() {}
+
+func (*EspReq_Msg_Duty) isEspReq_Msg_Op() {}
+
+type ESPResultMsg_Info struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Version   int32  `protobuf:"varint,1,opt,name=version,proto3" json:"version,omitempty"`
+	Challenge []byte `protobuf:"bytes,2,opt,name=challenge,proto3" json:"challenge,omitempty"`
+}
+
+func (x *ESPResultMsg_Info) Reset() {
+	*x = ESPResultMsg_Info{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_proto_espmsg_proto_msgTypes[4]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *ESPResultMsg_Info) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ESPResultMsg_Info) ProtoMessage() {}
+
+func (x *ESPResultMsg_Info) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_espmsg_proto_msgTypes[4]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ESPResultMsg_Info.ProtoReflect.Descriptor instead.
+func (*ESPResultMsg_Info) Descriptor() ([]byte, []int) {
+	return file_proto_espmsg_proto_rawDescGZIP(), []int{4}
+}
+
+func (x *ESPResultMsg_Info) GetVersion() int32 {
+	if x != nil {
+		return x.Version
+	}
+	return 0
+}
+
+func (x *ESPResultMsg_Info) GetChallenge() []byte {
+	if x != nil {
+		return x.Challenge
+	}
+	return nil
+}
+
+type ESPResultMsg_LoginResult struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Success bool   `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"`
+	Result  string `protobuf:"bytes,2,opt,name=result,proto3" json:"result,omitempty"`
+}
+
+func (x *ESPResultMsg_LoginResult) Reset() {
+	*x = ESPResultMsg_LoginResult{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_proto_espmsg_proto_msgTypes[5]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *ESPResultMsg_LoginResult) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ESPResultMsg_LoginResult) ProtoMessage() {}
+
+func (x *ESPResultMsg_LoginResult) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_espmsg_proto_msgTypes[5]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ESPResultMsg_LoginResult.ProtoReflect.Descriptor instead.
+func (*ESPResultMsg_LoginResult) Descriptor() ([]byte, []int) {
+	return file_proto_espmsg_proto_rawDescGZIP(), []int{5}
+}
+
+func (x *ESPResultMsg_LoginResult) GetSuccess() bool {
+	if x != nil {
+		return x.Success
+	}
+	return false
+}
+
+func (x *ESPResultMsg_LoginResult) GetResult() string {
+	if x != nil {
+		return x.Result
+	}
+	return ""
+}
+
+type EspResultMsg_Status struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Temp float32 `protobuf:"fixed32,1,opt,name=temp,proto3" json:"temp,omitempty"`
+	Load float32 `protobuf:"fixed32,2,opt,name=load,proto3" json:"load,omitempty"`
+	Duty int32   `protobuf:"varint,3,opt,name=duty,proto3" json:"duty,omitempty"`
+	Rpm  int32   `protobuf:"varint,4,opt,name=rpm,proto3" json:"rpm,omitempty"`
+}
+
+func (x *EspResultMsg_Status) Reset() {
+	*x = EspResultMsg_Status{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_proto_espmsg_proto_msgTypes[6]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *EspResultMsg_Status) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*EspResultMsg_Status) ProtoMessage() {}
+
+func (x *EspResultMsg_Status) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_espmsg_proto_msgTypes[6]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use EspResultMsg_Status.ProtoReflect.Descriptor instead.
+func (*EspResultMsg_Status) Descriptor() ([]byte, []int) {
+	return file_proto_espmsg_proto_rawDescGZIP(), []int{6}
+}
+
+func (x *EspResultMsg_Status) GetTemp() float32 {
 	if x != nil {
 		return x.Temp
 	}
 	return 0
 }
 
-func (x *EspResultStatus) GetLoad() float64 {
+func (x *EspResultMsg_Status) GetLoad() float32 {
 	if x != nil {
 		return x.Load
 	}
 	return 0
 }
 
-func (x *EspResultStatus) GetDuty() int32 {
+func (x *EspResultMsg_Status) GetDuty() int32 {
 	if x != nil {
 		return x.Duty
 	}
 	return 0
 }
 
-func (x *EspResultStatus) GetRpm() int32 {
+func (x *EspResultMsg_Status) GetRpm() int32 {
 	if x != nil {
 		return x.Rpm
 	}
 	return 0
+}
+
+type EspResultMsg_Config_Channel struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Enabled  bool  `protobuf:"varint,1,opt,name=enabled,proto3" json:"enabled,omitempty"`
+	LowTemp  int32 `protobuf:"varint,2,opt,name=lowTemp,proto3" json:"lowTemp,omitempty"`
+	HighTemp int32 `protobuf:"varint,3,opt,name=highTemp,proto3" json:"highTemp,omitempty"`
+	MinDuty  int32 `protobuf:"varint,4,opt,name=minDuty,proto3" json:"minDuty,omitempty"`
+}
+
+func (x *EspResultMsg_Config_Channel) Reset() {
+	*x = EspResultMsg_Config_Channel{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_proto_espmsg_proto_msgTypes[7]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *EspResultMsg_Config_Channel) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*EspResultMsg_Config_Channel) ProtoMessage() {}
+
+func (x *EspResultMsg_Config_Channel) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_espmsg_proto_msgTypes[7]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use EspResultMsg_Config_Channel.ProtoReflect.Descriptor instead.
+func (*EspResultMsg_Config_Channel) Descriptor() ([]byte, []int) {
+	return file_proto_espmsg_proto_rawDescGZIP(), []int{7}
+}
+
+func (x *EspResultMsg_Config_Channel) GetEnabled() bool {
+	if x != nil {
+		return x.Enabled
+	}
+	return false
+}
+
+func (x *EspResultMsg_Config_Channel) GetLowTemp() int32 {
+	if x != nil {
+		return x.LowTemp
+	}
+	return 0
+}
+
+func (x *EspResultMsg_Config_Channel) GetHighTemp() int32 {
+	if x != nil {
+		return x.HighTemp
+	}
+	return 0
+}
+
+func (x *EspResultMsg_Config_Channel) GetMinDuty() int32 {
+	if x != nil {
+		return x.MinDuty
+	}
+	return 0
+}
+
+type EspResultMsg_Config struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Channels  int32                          `protobuf:"varint,2,opt,name=channels,proto3" json:"channels,omitempty"`
+	Tz        string                         `protobuf:"bytes,1,opt,name=tz,proto3" json:"tz,omitempty"`
+	CfgConfig []*EspResultMsg_Config_Channel `protobuf:"bytes,3,rep,name=CfgConfig,proto3" json:"CfgConfig,omitempty"`
+}
+
+func (x *EspResultMsg_Config) Reset() {
+	*x = EspResultMsg_Config{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_proto_espmsg_proto_msgTypes[8]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *EspResultMsg_Config) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*EspResultMsg_Config) ProtoMessage() {}
+
+func (x *EspResultMsg_Config) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_espmsg_proto_msgTypes[8]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use EspResultMsg_Config.ProtoReflect.Descriptor instead.
+func (*EspResultMsg_Config) Descriptor() ([]byte, []int) {
+	return file_proto_espmsg_proto_rawDescGZIP(), []int{8}
+}
+
+func (x *EspResultMsg_Config) GetChannels() int32 {
+	if x != nil {
+		return x.Channels
+	}
+	return 0
+}
+
+func (x *EspResultMsg_Config) GetTz() string {
+	if x != nil {
+		return x.Tz
+	}
+	return ""
+}
+
+func (x *EspResultMsg_Config) GetCfgConfig() []*EspResultMsg_Config_Channel {
+	if x != nil {
+		return x.CfgConfig
+	}
+	return nil
 }
 
 type EspResult struct {
@@ -351,14 +673,17 @@ type EspResult struct {
 	Operation EspMsgType `protobuf:"varint,1,opt,name=operation,proto3,enum=espmsg.EspMsgType" json:"operation,omitempty"`
 	Id        int32      `protobuf:"varint,2,opt,name=id,proto3" json:"id,omitempty"`
 	// Types that are assignable to Op:
+	//	*EspResult_Info
+	//	*EspResult_Login
 	//	*EspResult_Status
+	//	*EspResult_Config
 	Op isEspResult_Op `protobuf_oneof:"op"`
 }
 
 func (x *EspResult) Reset() {
 	*x = EspResult{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_proto_espmsg_proto_msgTypes[4]
+		mi := &file_proto_espmsg_proto_msgTypes[9]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -371,7 +696,7 @@ func (x *EspResult) String() string {
 func (*EspResult) ProtoMessage() {}
 
 func (x *EspResult) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_espmsg_proto_msgTypes[4]
+	mi := &file_proto_espmsg_proto_msgTypes[9]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -384,7 +709,7 @@ func (x *EspResult) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use EspResult.ProtoReflect.Descriptor instead.
 func (*EspResult) Descriptor() ([]byte, []int) {
-	return file_proto_espmsg_proto_rawDescGZIP(), []int{4}
+	return file_proto_espmsg_proto_rawDescGZIP(), []int{9}
 }
 
 func (x *EspResult) GetOperation() EspMsgType {
@@ -408,9 +733,30 @@ func (m *EspResult) GetOp() isEspResult_Op {
 	return nil
 }
 
-func (x *EspResult) GetStatus() *EspResultStatus {
+func (x *EspResult) GetInfo() *ESPResultMsg_Info {
+	if x, ok := x.GetOp().(*EspResult_Info); ok {
+		return x.Info
+	}
+	return nil
+}
+
+func (x *EspResult) GetLogin() *ESPResultMsg_LoginResult {
+	if x, ok := x.GetOp().(*EspResult_Login); ok {
+		return x.Login
+	}
+	return nil
+}
+
+func (x *EspResult) GetStatus() *EspResultMsg_Status {
 	if x, ok := x.GetOp().(*EspResult_Status); ok {
 		return x.Status
+	}
+	return nil
+}
+
+func (x *EspResult) GetConfig() *EspResultMsg_Config {
+	if x, ok := x.GetOp().(*EspResult_Config); ok {
+		return x.Config
 	}
 	return nil
 }
@@ -419,52 +765,119 @@ type isEspResult_Op interface {
 	isEspResult_Op()
 }
 
-type EspResult_Status struct {
-	Status *EspResultStatus `protobuf:"bytes,3,opt,name=Status,proto3,oneof"`
+type EspResult_Info struct {
+	Info *ESPResultMsg_Info `protobuf:"bytes,3,opt,name=Info,proto3,oneof"`
 }
 
+type EspResult_Login struct {
+	Login *ESPResultMsg_LoginResult `protobuf:"bytes,4,opt,name=Login,proto3,oneof"`
+}
+
+type EspResult_Status struct {
+	Status *EspResultMsg_Status `protobuf:"bytes,5,opt,name=Status,proto3,oneof"`
+}
+
+type EspResult_Config struct {
+	Config *EspResultMsg_Config `protobuf:"bytes,6,opt,name=Config,proto3,oneof"`
+}
+
+func (*EspResult_Info) isEspResult_Op() {}
+
+func (*EspResult_Login) isEspResult_Op() {}
+
 func (*EspResult_Status) isEspResult_Op() {}
+
+func (*EspResult_Config) isEspResult_Op() {}
 
 var File_proto_espmsg_proto protoreflect.FileDescriptor
 
 var file_proto_espmsg_proto_rawDesc = []byte{
 	0x0a, 0x12, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x2f, 0x65, 0x73, 0x70, 0x6d, 0x73, 0x67, 0x2e, 0x70,
-	0x72, 0x6f, 0x74, 0x6f, 0x12, 0x06, 0x65, 0x73, 0x70, 0x6d, 0x73, 0x67, 0x22, 0x31, 0x0a, 0x07,
-	0x53, 0x65, 0x74, 0x50, 0x65, 0x72, 0x66, 0x12, 0x12, 0x0a, 0x04, 0x74, 0x65, 0x6d, 0x70, 0x18,
-	0x01, 0x20, 0x01, 0x28, 0x01, 0x52, 0x04, 0x74, 0x65, 0x6d, 0x70, 0x12, 0x12, 0x0a, 0x04, 0x6c,
-	0x6f, 0x61, 0x64, 0x18, 0x02, 0x20, 0x01, 0x28, 0x01, 0x52, 0x04, 0x6c, 0x6f, 0x61, 0x64, 0x22,
-	0x1d, 0x0a, 0x07, 0x53, 0x65, 0x74, 0x44, 0x75, 0x74, 0x79, 0x12, 0x12, 0x0a, 0x04, 0x64, 0x75,
-	0x74, 0x79, 0x18, 0x01, 0x20, 0x01, 0x28, 0x01, 0x52, 0x04, 0x64, 0x75, 0x74, 0x79, 0x22, 0x9e,
-	0x01, 0x0a, 0x06, 0x45, 0x73, 0x70, 0x4d, 0x73, 0x67, 0x12, 0x30, 0x0a, 0x09, 0x6f, 0x70, 0x65,
-	0x72, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0e, 0x32, 0x12, 0x2e, 0x65,
-	0x73, 0x70, 0x6d, 0x73, 0x67, 0x2e, 0x45, 0x73, 0x70, 0x4d, 0x73, 0x67, 0x54, 0x79, 0x70, 0x65,
-	0x52, 0x09, 0x6f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x12, 0x0e, 0x0a, 0x02, 0x69,
-	0x64, 0x18, 0x02, 0x20, 0x01, 0x28, 0x05, 0x52, 0x02, 0x69, 0x64, 0x12, 0x25, 0x0a, 0x04, 0x50,
-	0x65, 0x72, 0x66, 0x18, 0x03, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x0f, 0x2e, 0x65, 0x73, 0x70, 0x6d,
-	0x73, 0x67, 0x2e, 0x53, 0x65, 0x74, 0x50, 0x65, 0x72, 0x66, 0x48, 0x00, 0x52, 0x04, 0x50, 0x65,
-	0x72, 0x66, 0x12, 0x25, 0x0a, 0x04, 0x44, 0x75, 0x74, 0x79, 0x18, 0x04, 0x20, 0x01, 0x28, 0x0b,
-	0x32, 0x0f, 0x2e, 0x65, 0x73, 0x70, 0x6d, 0x73, 0x67, 0x2e, 0x53, 0x65, 0x74, 0x44, 0x75, 0x74,
+	0x72, 0x6f, 0x74, 0x6f, 0x12, 0x06, 0x65, 0x73, 0x70, 0x6d, 0x73, 0x67, 0x22, 0x40, 0x0a, 0x0c,
+	0x45, 0x53, 0x50, 0x52, 0x65, 0x71, 0x5f, 0x4c, 0x6f, 0x67, 0x69, 0x6e, 0x12, 0x1a, 0x0a, 0x08,
+	0x75, 0x73, 0x65, 0x72, 0x6e, 0x61, 0x6d, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x08,
+	0x75, 0x73, 0x65, 0x72, 0x6e, 0x61, 0x6d, 0x65, 0x12, 0x14, 0x0a, 0x05, 0x74, 0x6f, 0x6b, 0x65,
+	0x6e, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x05, 0x74, 0x6f, 0x6b, 0x65, 0x6e, 0x22, 0x38,
+	0x0a, 0x0e, 0x45, 0x53, 0x50, 0x52, 0x65, 0x71, 0x5f, 0x53, 0x65, 0x74, 0x50, 0x65, 0x72, 0x66,
+	0x12, 0x12, 0x0a, 0x04, 0x74, 0x65, 0x6d, 0x70, 0x18, 0x01, 0x20, 0x01, 0x28, 0x02, 0x52, 0x04,
+	0x74, 0x65, 0x6d, 0x70, 0x12, 0x12, 0x0a, 0x04, 0x6c, 0x6f, 0x61, 0x64, 0x18, 0x02, 0x20, 0x01,
+	0x28, 0x02, 0x52, 0x04, 0x6c, 0x6f, 0x61, 0x64, 0x22, 0x24, 0x0a, 0x0e, 0x45, 0x53, 0x50, 0x52,
+	0x65, 0x71, 0x5f, 0x53, 0x65, 0x74, 0x44, 0x75, 0x74, 0x79, 0x12, 0x12, 0x0a, 0x04, 0x64, 0x75,
+	0x74, 0x79, 0x18, 0x01, 0x20, 0x01, 0x28, 0x02, 0x52, 0x04, 0x64, 0x75, 0x74, 0x79, 0x22, 0xde,
+	0x01, 0x0a, 0x0a, 0x45, 0x73, 0x70, 0x52, 0x65, 0x71, 0x5f, 0x4d, 0x73, 0x67, 0x12, 0x30, 0x0a,
+	0x09, 0x6f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0e,
+	0x32, 0x12, 0x2e, 0x65, 0x73, 0x70, 0x6d, 0x73, 0x67, 0x2e, 0x45, 0x73, 0x70, 0x4d, 0x73, 0x67,
+	0x54, 0x79, 0x70, 0x65, 0x52, 0x09, 0x6f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x12,
+	0x0e, 0x0a, 0x02, 0x69, 0x64, 0x18, 0x02, 0x20, 0x01, 0x28, 0x05, 0x52, 0x02, 0x69, 0x64, 0x12,
+	0x2c, 0x0a, 0x05, 0x6c, 0x6f, 0x67, 0x69, 0x6e, 0x18, 0x03, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x14,
+	0x2e, 0x65, 0x73, 0x70, 0x6d, 0x73, 0x67, 0x2e, 0x45, 0x53, 0x50, 0x52, 0x65, 0x71, 0x5f, 0x4c,
+	0x6f, 0x67, 0x69, 0x6e, 0x48, 0x00, 0x52, 0x05, 0x6c, 0x6f, 0x67, 0x69, 0x6e, 0x12, 0x2c, 0x0a,
+	0x04, 0x50, 0x65, 0x72, 0x66, 0x18, 0x04, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x16, 0x2e, 0x65, 0x73,
+	0x70, 0x6d, 0x73, 0x67, 0x2e, 0x45, 0x53, 0x50, 0x52, 0x65, 0x71, 0x5f, 0x53, 0x65, 0x74, 0x50,
+	0x65, 0x72, 0x66, 0x48, 0x00, 0x52, 0x04, 0x50, 0x65, 0x72, 0x66, 0x12, 0x2c, 0x0a, 0x04, 0x44,
+	0x75, 0x74, 0x79, 0x18, 0x05, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x16, 0x2e, 0x65, 0x73, 0x70, 0x6d,
+	0x73, 0x67, 0x2e, 0x45, 0x53, 0x50, 0x52, 0x65, 0x71, 0x5f, 0x53, 0x65, 0x74, 0x44, 0x75, 0x74,
 	0x79, 0x48, 0x00, 0x52, 0x04, 0x44, 0x75, 0x74, 0x79, 0x42, 0x04, 0x0a, 0x02, 0x6f, 0x70, 0x22,
-	0x5f, 0x0a, 0x0f, 0x45, 0x73, 0x70, 0x52, 0x65, 0x73, 0x75, 0x6c, 0x74, 0x53, 0x74, 0x61, 0x74,
-	0x75, 0x73, 0x12, 0x12, 0x0a, 0x04, 0x74, 0x65, 0x6d, 0x70, 0x18, 0x01, 0x20, 0x01, 0x28, 0x01,
-	0x52, 0x04, 0x74, 0x65, 0x6d, 0x70, 0x12, 0x12, 0x0a, 0x04, 0x6c, 0x6f, 0x61, 0x64, 0x18, 0x02,
-	0x20, 0x01, 0x28, 0x01, 0x52, 0x04, 0x6c, 0x6f, 0x61, 0x64, 0x12, 0x12, 0x0a, 0x04, 0x64, 0x75,
-	0x74, 0x79, 0x18, 0x03, 0x20, 0x01, 0x28, 0x05, 0x52, 0x04, 0x64, 0x75, 0x74, 0x79, 0x12, 0x10,
-	0x0a, 0x03, 0x72, 0x70, 0x6d, 0x18, 0x04, 0x20, 0x01, 0x28, 0x05, 0x52, 0x03, 0x72, 0x70, 0x6d,
-	0x22, 0x86, 0x01, 0x0a, 0x09, 0x45, 0x73, 0x70, 0x52, 0x65, 0x73, 0x75, 0x6c, 0x74, 0x12, 0x30,
+	0x4b, 0x0a, 0x11, 0x45, 0x53, 0x50, 0x52, 0x65, 0x73, 0x75, 0x6c, 0x74, 0x4d, 0x73, 0x67, 0x5f,
+	0x49, 0x6e, 0x66, 0x6f, 0x12, 0x18, 0x0a, 0x07, 0x76, 0x65, 0x72, 0x73, 0x69, 0x6f, 0x6e, 0x18,
+	0x01, 0x20, 0x01, 0x28, 0x05, 0x52, 0x07, 0x76, 0x65, 0x72, 0x73, 0x69, 0x6f, 0x6e, 0x12, 0x1c,
+	0x0a, 0x09, 0x63, 0x68, 0x61, 0x6c, 0x6c, 0x65, 0x6e, 0x67, 0x65, 0x18, 0x02, 0x20, 0x01, 0x28,
+	0x0c, 0x52, 0x09, 0x63, 0x68, 0x61, 0x6c, 0x6c, 0x65, 0x6e, 0x67, 0x65, 0x22, 0x4c, 0x0a, 0x18,
+	0x45, 0x53, 0x50, 0x52, 0x65, 0x73, 0x75, 0x6c, 0x74, 0x4d, 0x73, 0x67, 0x5f, 0x4c, 0x6f, 0x67,
+	0x69, 0x6e, 0x52, 0x65, 0x73, 0x75, 0x6c, 0x74, 0x12, 0x18, 0x0a, 0x07, 0x73, 0x75, 0x63, 0x63,
+	0x65, 0x73, 0x73, 0x18, 0x01, 0x20, 0x01, 0x28, 0x08, 0x52, 0x07, 0x73, 0x75, 0x63, 0x63, 0x65,
+	0x73, 0x73, 0x12, 0x16, 0x0a, 0x06, 0x72, 0x65, 0x73, 0x75, 0x6c, 0x74, 0x18, 0x02, 0x20, 0x01,
+	0x28, 0x09, 0x52, 0x06, 0x72, 0x65, 0x73, 0x75, 0x6c, 0x74, 0x22, 0x63, 0x0a, 0x13, 0x45, 0x73,
+	0x70, 0x52, 0x65, 0x73, 0x75, 0x6c, 0x74, 0x4d, 0x73, 0x67, 0x5f, 0x53, 0x74, 0x61, 0x74, 0x75,
+	0x73, 0x12, 0x12, 0x0a, 0x04, 0x74, 0x65, 0x6d, 0x70, 0x18, 0x01, 0x20, 0x01, 0x28, 0x02, 0x52,
+	0x04, 0x74, 0x65, 0x6d, 0x70, 0x12, 0x12, 0x0a, 0x04, 0x6c, 0x6f, 0x61, 0x64, 0x18, 0x02, 0x20,
+	0x01, 0x28, 0x02, 0x52, 0x04, 0x6c, 0x6f, 0x61, 0x64, 0x12, 0x12, 0x0a, 0x04, 0x64, 0x75, 0x74,
+	0x79, 0x18, 0x03, 0x20, 0x01, 0x28, 0x05, 0x52, 0x04, 0x64, 0x75, 0x74, 0x79, 0x12, 0x10, 0x0a,
+	0x03, 0x72, 0x70, 0x6d, 0x18, 0x04, 0x20, 0x01, 0x28, 0x05, 0x52, 0x03, 0x72, 0x70, 0x6d, 0x22,
+	0x87, 0x01, 0x0a, 0x1b, 0x45, 0x73, 0x70, 0x52, 0x65, 0x73, 0x75, 0x6c, 0x74, 0x4d, 0x73, 0x67,
+	0x5f, 0x43, 0x6f, 0x6e, 0x66, 0x69, 0x67, 0x5f, 0x43, 0x68, 0x61, 0x6e, 0x6e, 0x65, 0x6c, 0x12,
+	0x18, 0x0a, 0x07, 0x65, 0x6e, 0x61, 0x62, 0x6c, 0x65, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x08,
+	0x52, 0x07, 0x65, 0x6e, 0x61, 0x62, 0x6c, 0x65, 0x64, 0x12, 0x18, 0x0a, 0x07, 0x6c, 0x6f, 0x77,
+	0x54, 0x65, 0x6d, 0x70, 0x18, 0x02, 0x20, 0x01, 0x28, 0x05, 0x52, 0x07, 0x6c, 0x6f, 0x77, 0x54,
+	0x65, 0x6d, 0x70, 0x12, 0x1a, 0x0a, 0x08, 0x68, 0x69, 0x67, 0x68, 0x54, 0x65, 0x6d, 0x70, 0x18,
+	0x03, 0x20, 0x01, 0x28, 0x05, 0x52, 0x08, 0x68, 0x69, 0x67, 0x68, 0x54, 0x65, 0x6d, 0x70, 0x12,
+	0x18, 0x0a, 0x07, 0x6d, 0x69, 0x6e, 0x44, 0x75, 0x74, 0x79, 0x18, 0x04, 0x20, 0x01, 0x28, 0x05,
+	0x52, 0x07, 0x6d, 0x69, 0x6e, 0x44, 0x75, 0x74, 0x79, 0x22, 0x84, 0x01, 0x0a, 0x13, 0x45, 0x73,
+	0x70, 0x52, 0x65, 0x73, 0x75, 0x6c, 0x74, 0x4d, 0x73, 0x67, 0x5f, 0x43, 0x6f, 0x6e, 0x66, 0x69,
+	0x67, 0x12, 0x1a, 0x0a, 0x08, 0x63, 0x68, 0x61, 0x6e, 0x6e, 0x65, 0x6c, 0x73, 0x18, 0x02, 0x20,
+	0x01, 0x28, 0x05, 0x52, 0x08, 0x63, 0x68, 0x61, 0x6e, 0x6e, 0x65, 0x6c, 0x73, 0x12, 0x0e, 0x0a,
+	0x02, 0x74, 0x7a, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x02, 0x74, 0x7a, 0x12, 0x41, 0x0a,
+	0x09, 0x43, 0x66, 0x67, 0x43, 0x6f, 0x6e, 0x66, 0x69, 0x67, 0x18, 0x03, 0x20, 0x03, 0x28, 0x0b,
+	0x32, 0x23, 0x2e, 0x65, 0x73, 0x70, 0x6d, 0x73, 0x67, 0x2e, 0x45, 0x73, 0x70, 0x52, 0x65, 0x73,
+	0x75, 0x6c, 0x74, 0x4d, 0x73, 0x67, 0x5f, 0x43, 0x6f, 0x6e, 0x66, 0x69, 0x67, 0x5f, 0x43, 0x68,
+	0x61, 0x6e, 0x6e, 0x65, 0x6c, 0x52, 0x09, 0x43, 0x66, 0x67, 0x43, 0x6f, 0x6e, 0x66, 0x69, 0x67,
+	0x22, 0xac, 0x02, 0x0a, 0x09, 0x45, 0x73, 0x70, 0x52, 0x65, 0x73, 0x75, 0x6c, 0x74, 0x12, 0x30,
 	0x0a, 0x09, 0x6f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x18, 0x01, 0x20, 0x01, 0x28,
 	0x0e, 0x32, 0x12, 0x2e, 0x65, 0x73, 0x70, 0x6d, 0x73, 0x67, 0x2e, 0x45, 0x73, 0x70, 0x4d, 0x73,
 	0x67, 0x54, 0x79, 0x70, 0x65, 0x52, 0x09, 0x6f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x69, 0x6f, 0x6e,
 	0x12, 0x0e, 0x0a, 0x02, 0x69, 0x64, 0x18, 0x02, 0x20, 0x01, 0x28, 0x05, 0x52, 0x02, 0x69, 0x64,
-	0x12, 0x31, 0x0a, 0x06, 0x53, 0x74, 0x61, 0x74, 0x75, 0x73, 0x18, 0x03, 0x20, 0x01, 0x28, 0x0b,
-	0x32, 0x17, 0x2e, 0x65, 0x73, 0x70, 0x6d, 0x73, 0x67, 0x2e, 0x45, 0x73, 0x70, 0x52, 0x65, 0x73,
-	0x75, 0x6c, 0x74, 0x53, 0x74, 0x61, 0x74, 0x75, 0x73, 0x48, 0x00, 0x52, 0x06, 0x53, 0x74, 0x61,
-	0x74, 0x75, 0x73, 0x42, 0x04, 0x0a, 0x02, 0x6f, 0x70, 0x2a, 0x4a, 0x0a, 0x0a, 0x45, 0x73, 0x70,
-	0x4d, 0x73, 0x67, 0x54, 0x79, 0x70, 0x65, 0x12, 0x0d, 0x0a, 0x09, 0x4f, 0x70, 0x49, 0x6e, 0x76,
-	0x61, 0x6c, 0x69, 0x64, 0x10, 0x00, 0x12, 0x0d, 0x0a, 0x09, 0x4f, 0x50, 0x53, 0x65, 0x74, 0x50,
-	0x65, 0x72, 0x66, 0x10, 0x01, 0x12, 0x0d, 0x0a, 0x09, 0x4f, 0x50, 0x53, 0x65, 0x74, 0x44, 0x75,
-	0x74, 0x79, 0x10, 0x02, 0x12, 0x0f, 0x0a, 0x0b, 0x4f, 0x50, 0x47, 0x65, 0x74, 0x53, 0x74, 0x61,
-	0x74, 0x75, 0x73, 0x10, 0x03, 0x42, 0x0c, 0x5a, 0x0a, 0x70, 0x6b, 0x67, 0x2f, 0x65, 0x73, 0x70,
+	0x12, 0x2f, 0x0a, 0x04, 0x49, 0x6e, 0x66, 0x6f, 0x18, 0x03, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x19,
+	0x2e, 0x65, 0x73, 0x70, 0x6d, 0x73, 0x67, 0x2e, 0x45, 0x53, 0x50, 0x52, 0x65, 0x73, 0x75, 0x6c,
+	0x74, 0x4d, 0x73, 0x67, 0x5f, 0x49, 0x6e, 0x66, 0x6f, 0x48, 0x00, 0x52, 0x04, 0x49, 0x6e, 0x66,
+	0x6f, 0x12, 0x38, 0x0a, 0x05, 0x4c, 0x6f, 0x67, 0x69, 0x6e, 0x18, 0x04, 0x20, 0x01, 0x28, 0x0b,
+	0x32, 0x20, 0x2e, 0x65, 0x73, 0x70, 0x6d, 0x73, 0x67, 0x2e, 0x45, 0x53, 0x50, 0x52, 0x65, 0x73,
+	0x75, 0x6c, 0x74, 0x4d, 0x73, 0x67, 0x5f, 0x4c, 0x6f, 0x67, 0x69, 0x6e, 0x52, 0x65, 0x73, 0x75,
+	0x6c, 0x74, 0x48, 0x00, 0x52, 0x05, 0x4c, 0x6f, 0x67, 0x69, 0x6e, 0x12, 0x35, 0x0a, 0x06, 0x53,
+	0x74, 0x61, 0x74, 0x75, 0x73, 0x18, 0x05, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x1b, 0x2e, 0x65, 0x73,
+	0x70, 0x6d, 0x73, 0x67, 0x2e, 0x45, 0x73, 0x70, 0x52, 0x65, 0x73, 0x75, 0x6c, 0x74, 0x4d, 0x73,
+	0x67, 0x5f, 0x53, 0x74, 0x61, 0x74, 0x75, 0x73, 0x48, 0x00, 0x52, 0x06, 0x53, 0x74, 0x61, 0x74,
+	0x75, 0x73, 0x12, 0x35, 0x0a, 0x06, 0x43, 0x6f, 0x6e, 0x66, 0x69, 0x67, 0x18, 0x06, 0x20, 0x01,
+	0x28, 0x0b, 0x32, 0x1b, 0x2e, 0x65, 0x73, 0x70, 0x6d, 0x73, 0x67, 0x2e, 0x45, 0x73, 0x70, 0x52,
+	0x65, 0x73, 0x75, 0x6c, 0x74, 0x4d, 0x73, 0x67, 0x5f, 0x43, 0x6f, 0x6e, 0x66, 0x69, 0x67, 0x48,
+	0x00, 0x52, 0x06, 0x43, 0x6f, 0x6e, 0x66, 0x69, 0x67, 0x42, 0x04, 0x0a, 0x02, 0x6f, 0x70, 0x2a,
+	0x74, 0x0a, 0x0a, 0x45, 0x73, 0x70, 0x4d, 0x73, 0x67, 0x54, 0x79, 0x70, 0x65, 0x12, 0x0d, 0x0a,
+	0x09, 0x4f, 0x70, 0x49, 0x6e, 0x76, 0x61, 0x6c, 0x69, 0x64, 0x10, 0x00, 0x12, 0x0a, 0x0a, 0x06,
+	0x4f, 0x70, 0x49, 0x6e, 0x66, 0x6f, 0x10, 0x01, 0x12, 0x0b, 0x0a, 0x07, 0x4f, 0x70, 0x4c, 0x6f,
+	0x67, 0x69, 0x6e, 0x10, 0x02, 0x12, 0x0d, 0x0a, 0x09, 0x4f, 0x50, 0x53, 0x65, 0x74, 0x50, 0x65,
+	0x72, 0x66, 0x10, 0x03, 0x12, 0x0d, 0x0a, 0x09, 0x4f, 0x50, 0x53, 0x65, 0x74, 0x44, 0x75, 0x74,
+	0x79, 0x10, 0x04, 0x12, 0x0f, 0x0a, 0x0b, 0x4f, 0x50, 0x47, 0x65, 0x74, 0x53, 0x74, 0x61, 0x74,
+	0x75, 0x73, 0x10, 0x05, 0x12, 0x0f, 0x0a, 0x0b, 0x4f, 0x70, 0x47, 0x65, 0x74, 0x43, 0x6f, 0x6e,
+	0x66, 0x69, 0x67, 0x10, 0x06, 0x42, 0x0c, 0x5a, 0x0a, 0x70, 0x6b, 0x67, 0x2f, 0x65, 0x73, 0x70,
 	0x6d, 0x73, 0x67, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
@@ -481,26 +894,36 @@ func file_proto_espmsg_proto_rawDescGZIP() []byte {
 }
 
 var file_proto_espmsg_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
-var file_proto_espmsg_proto_msgTypes = make([]protoimpl.MessageInfo, 5)
+var file_proto_espmsg_proto_msgTypes = make([]protoimpl.MessageInfo, 10)
 var file_proto_espmsg_proto_goTypes = []interface{}{
-	(EspMsgType)(0),         // 0: espmsg.EspMsgType
-	(*SetPerf)(nil),         // 1: espmsg.SetPerf
-	(*SetDuty)(nil),         // 2: espmsg.SetDuty
-	(*EspMsg)(nil),          // 3: espmsg.EspMsg
-	(*EspResultStatus)(nil), // 4: espmsg.EspResultStatus
-	(*EspResult)(nil),       // 5: espmsg.EspResult
+	(EspMsgType)(0),                     // 0: espmsg.EspMsgType
+	(*ESPReq_Login)(nil),                // 1: espmsg.ESPReq_Login
+	(*ESPReq_SetPerf)(nil),              // 2: espmsg.ESPReq_SetPerf
+	(*ESPReq_SetDuty)(nil),              // 3: espmsg.ESPReq_SetDuty
+	(*EspReq_Msg)(nil),                  // 4: espmsg.EspReq_Msg
+	(*ESPResultMsg_Info)(nil),           // 5: espmsg.ESPResultMsg_Info
+	(*ESPResultMsg_LoginResult)(nil),    // 6: espmsg.ESPResultMsg_LoginResult
+	(*EspResultMsg_Status)(nil),         // 7: espmsg.EspResultMsg_Status
+	(*EspResultMsg_Config_Channel)(nil), // 8: espmsg.EspResultMsg_Config_Channel
+	(*EspResultMsg_Config)(nil),         // 9: espmsg.EspResultMsg_Config
+	(*EspResult)(nil),                   // 10: espmsg.EspResult
 }
 var file_proto_espmsg_proto_depIdxs = []int32{
-	0, // 0: espmsg.EspMsg.operation:type_name -> espmsg.EspMsgType
-	1, // 1: espmsg.EspMsg.Perf:type_name -> espmsg.SetPerf
-	2, // 2: espmsg.EspMsg.Duty:type_name -> espmsg.SetDuty
-	0, // 3: espmsg.EspResult.operation:type_name -> espmsg.EspMsgType
-	4, // 4: espmsg.EspResult.Status:type_name -> espmsg.EspResultStatus
-	5, // [5:5] is the sub-list for method output_type
-	5, // [5:5] is the sub-list for method input_type
-	5, // [5:5] is the sub-list for extension type_name
-	5, // [5:5] is the sub-list for extension extendee
-	0, // [0:5] is the sub-list for field type_name
+	0,  // 0: espmsg.EspReq_Msg.operation:type_name -> espmsg.EspMsgType
+	1,  // 1: espmsg.EspReq_Msg.login:type_name -> espmsg.ESPReq_Login
+	2,  // 2: espmsg.EspReq_Msg.Perf:type_name -> espmsg.ESPReq_SetPerf
+	3,  // 3: espmsg.EspReq_Msg.Duty:type_name -> espmsg.ESPReq_SetDuty
+	8,  // 4: espmsg.EspResultMsg_Config.CfgConfig:type_name -> espmsg.EspResultMsg_Config_Channel
+	0,  // 5: espmsg.EspResult.operation:type_name -> espmsg.EspMsgType
+	5,  // 6: espmsg.EspResult.Info:type_name -> espmsg.ESPResultMsg_Info
+	6,  // 7: espmsg.EspResult.Login:type_name -> espmsg.ESPResultMsg_LoginResult
+	7,  // 8: espmsg.EspResult.Status:type_name -> espmsg.EspResultMsg_Status
+	9,  // 9: espmsg.EspResult.Config:type_name -> espmsg.EspResultMsg_Config
+	10, // [10:10] is the sub-list for method output_type
+	10, // [10:10] is the sub-list for method input_type
+	10, // [10:10] is the sub-list for extension type_name
+	10, // [10:10] is the sub-list for extension extendee
+	0,  // [0:10] is the sub-list for field type_name
 }
 
 func init() { file_proto_espmsg_proto_init() }
@@ -510,7 +933,7 @@ func file_proto_espmsg_proto_init() {
 	}
 	if !protoimpl.UnsafeEnabled {
 		file_proto_espmsg_proto_msgTypes[0].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*SetPerf); i {
+			switch v := v.(*ESPReq_Login); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -522,7 +945,7 @@ func file_proto_espmsg_proto_init() {
 			}
 		}
 		file_proto_espmsg_proto_msgTypes[1].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*SetDuty); i {
+			switch v := v.(*ESPReq_SetPerf); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -534,7 +957,7 @@ func file_proto_espmsg_proto_init() {
 			}
 		}
 		file_proto_espmsg_proto_msgTypes[2].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*EspMsg); i {
+			switch v := v.(*ESPReq_SetDuty); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -546,7 +969,7 @@ func file_proto_espmsg_proto_init() {
 			}
 		}
 		file_proto_espmsg_proto_msgTypes[3].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*EspResultStatus); i {
+			switch v := v.(*EspReq_Msg); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -558,6 +981,66 @@ func file_proto_espmsg_proto_init() {
 			}
 		}
 		file_proto_espmsg_proto_msgTypes[4].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*ESPResultMsg_Info); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_proto_espmsg_proto_msgTypes[5].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*ESPResultMsg_LoginResult); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_proto_espmsg_proto_msgTypes[6].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*EspResultMsg_Status); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_proto_espmsg_proto_msgTypes[7].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*EspResultMsg_Config_Channel); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_proto_espmsg_proto_msgTypes[8].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*EspResultMsg_Config); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_proto_espmsg_proto_msgTypes[9].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*EspResult); i {
 			case 0:
 				return &v.state
@@ -570,12 +1053,16 @@ func file_proto_espmsg_proto_init() {
 			}
 		}
 	}
-	file_proto_espmsg_proto_msgTypes[2].OneofWrappers = []interface{}{
-		(*EspMsg_Perf)(nil),
-		(*EspMsg_Duty)(nil),
+	file_proto_espmsg_proto_msgTypes[3].OneofWrappers = []interface{}{
+		(*EspReq_Msg_Login)(nil),
+		(*EspReq_Msg_Perf)(nil),
+		(*EspReq_Msg_Duty)(nil),
 	}
-	file_proto_espmsg_proto_msgTypes[4].OneofWrappers = []interface{}{
+	file_proto_espmsg_proto_msgTypes[9].OneofWrappers = []interface{}{
+		(*EspResult_Info)(nil),
+		(*EspResult_Login)(nil),
 		(*EspResult_Status)(nil),
+		(*EspResult_Config)(nil),
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
@@ -583,7 +1070,7 @@ func file_proto_espmsg_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_proto_espmsg_proto_rawDesc,
 			NumEnums:      1,
-			NumMessages:   5,
+			NumMessages:   10,
 			NumExtensions: 0,
 			NumServices:   0,
 		},

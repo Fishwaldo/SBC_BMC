@@ -8,40 +8,78 @@ option go_package = "pkg/espmsg";
 
 enum EspMsgType {
     OpInvalid = 0;
-    OPSetPerf = 1;
-    OPSetDuty = 2;
-    OPGetStatus = 3;
+    OpInfo = 1;
+    OpLogin = 2;
+    OPSetPerf = 3;
+    OPSetDuty = 4;
+    OPGetStatus = 5;
+    OpGetConfig = 6;
 }
 
-message SetPerf {
-    double temp = 1;
-    double load = 2;
+
+message ESPReq_Login {
+    string username = 1;
+    string token = 2;
 }
 
-message SetDuty {
-    double duty = 1;
+message ESPReq_SetPerf {
+    float temp = 1;
+    float load = 2;
 }
 
-message EspMsg {
+message ESPReq_SetDuty {
+    float duty = 1;
+}
+
+message EspReq_Msg {
     EspMsgType operation = 1;
     int32 id = 2;
     oneof op {
-        SetPerf Perf = 3;
-        SetDuty Duty = 4;
+        ESPReq_Login login = 3;
+        ESPReq_SetPerf Perf = 4;
+        ESPReq_SetDuty Duty = 5;
     }
 }
 
-message EspResultStatus {
-    double temp = 1;
-    double load = 2;
+message ESPResultMsg_Info {
+    int32 version = 1;
+    bytes challenge = 2;
+}
+
+
+message ESPResultMsg_LoginResult {
+    bool success = 1;
+    string result = 2;
+}
+
+
+message EspResultMsg_Status {
+    float temp = 1;
+    float load = 2;
     int32 duty = 3;
     int32 rpm = 4;
+}
+
+message EspResultMsg_Config_Channel {
+    bool enabled = 1;
+    int32 lowTemp = 2;
+    int32 highTemp = 3;
+    int32 minDuty = 4;
+}
+
+message EspResultMsg_Config {
+    int32 channels = 2;
+    string tz = 1;
+    repeated EspResultMsg_Config_Channel CfgConfig = 3;
 }
 
 message EspResult {
     EspMsgType operation = 1;
     int32 id = 2;
     oneof op {
-        EspResultStatus Status = 3;
+        ESPResultMsg_Info Info = 3;
+        ESPResultMsg_LoginResult Login = 4;
+        EspResultMsg_Status Status = 5;
+        EspResultMsg_Config Config = 6;
     }
 }

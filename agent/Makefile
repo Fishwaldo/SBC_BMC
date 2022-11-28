@@ -7,8 +7,8 @@ PROTOC_GEN_GO := $(GOPATH)/bin/protoc-gen-go
 #	go get -u google.golang.org/protobuf/cmd/protoc-gen-go@latest
 
 #pkg/generated/espmsg.pb.go: proto/espmsg.proto | $(PROTOC_GEN_GO)
-pkg/generated/espmsg.pb.go: ../proto/espmsg.proto
-	protoc --go_out=. ../proto/espmsg.proto
+pkg/generated/espmsg.pb.go: proto/espmsg.proto
+	protoc --go_out=. proto/espmsg.proto
 
 # This is a "phony" target - an alias for the above command, so "make compile"
 # still works.

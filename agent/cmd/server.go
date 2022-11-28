@@ -49,5 +49,6 @@ func startServer() {
 	hostmonitor.StartSendServer()
 	hostmonitor.StartSensors()
 	<- sigs
+	//hostmonitor.StopSensors()
 	hostmonitor.Log.Info("Stopping server")
 }

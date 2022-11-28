@@ -16,9 +16,9 @@ func StartSensors() {
 		for {
 			select {
 			case <- quit:
-				Log.Info("Stopping sensors")
+				Log.Info("Stopping sensors Loop")
 				return
-			case <- time.After(2 * time.Second):
+			case <- time.After(5 * time.Second):
 				temps, err := GetTemp()
 				if err != nil {
 					Log.Error(err, "Error getting temp")
