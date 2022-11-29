@@ -4,6 +4,7 @@ import (
 	"math/rand"
 
 	"github.com/Fishwaldo/esp32-sbcfanctrl/client/pkg/espmsg"
+	"github.com/spf13/viper"
 	"google.golang.org/protobuf/proto"
 )
 
@@ -43,10 +44,11 @@ func processResponse(msg *espmsg.EspResult) {
 			Op: &espmsg.EspReq_Msg_Login{
 				Login: &espmsg.ESPReq_Login{
 					Username: "",
-					Token: "12345678",
+					Token: viper.GetString("sbcbmc.auth"),
 				},
 			},
 		}
+		Log.Info("Packet", "msg", pbmsg)
 		sendPB(&pbmsg)
 	case espmsg.EspMsgType_OpLogin:
 		Log.Info("Got Login Packet from ESP", "msg", msg)
@@ -56,15 +58,20 @@ func processResponse(msg *espmsg.EspResult) {
 		sendPB(&pbmsg2)
 	case espmsg.EspMsgType_OpGetConfig:
 		Log.Info("Got Config Packet from ESP", "msg", msg)
-		cfg := msg.GetConfig()
-		var i int32
-		for i = 0; i < cfg.Channels; i++ {
-			pbmsg2 := espmsg.EspReq_Msg{
-				Operation: espmsg.EspMsgType_OPGetStatus,
-				Id: i,
-			}
-			sendPB(&pbmsg2)
+		pbmsg2 := espmsg.EspReq_Msg{
+			Operation: espmsg.EspMsgType_OPGetStatus,
+			Id: viper.GetInt32("agent.id"),
 		}
+		sendPB(&pbmsg2)
+//		cfg := msg.GetConfig()
+		// var i int32
+		// for i = 0; i < cfg.Channels; i++ {
+		// 	pbmsg2 := espmsg.EspReq_Msg{
+		// 		Operation: espmsg.EspMsgType_OPGetStatus,
+		// 		Id: i,
+		// 	}
+		// 	sendPB(&pbmsg2)
+		// }
 	case espmsg.EspMsgType_OPGetStatus:
 		Log.Info("Got Status Packet from ESP", "msg", msg)
 	}
@@ -73,7 +80,7 @@ func processResponse(msg *espmsg.EspResult) {
 func StartSendServer() error {
 
 	newConn.Init();
-	err := newConn.Connect("10.100.201.129", 1234)
+	err := newConn.Connect(viper.GetString("sbcbmc.server"), viper.GetInt("sbcbmc.port"))
 	if err != nil {
 		Log.Error(err, "Error connecting to ESP")
 		return err
@@ -96,40 +103,6 @@ func StartSendServer() error {
 			}
 		}
 	}()
-
-
-
-	// var err error
-	// conn, err = net.Dial("tcp", "10.100.201.129:1234")
-	// if err != nil {
-	// 	Log.Error(err, "Error connecting to server. Will Retry")
-	// }
-	// go func() {
-	// 	for {
-	// 		response := espmsg.EspResult{}
-	// 		err := protodelim.UnmarshalFrom(bufio.NewReader(conn), &response)
-	// 		if err != nil {
-	// 			Log.Error(err, "Error reading response from ESP")
-	// 			quit <- true
-	// 			return
-	// 		} else {
-	// 			Log.Info("Got message from ESP", "Operation", response.Operation.String(), "msg", &response)
-	// 			processResponse(&response);
-	// 		}
-	// 	}
-	// }()
-
-	// go func() {
-	// 	for {
-	// 		select {
-	// 		case <-quit:
-	// 			Log.Info("Stopping send server")
-	// 			return
-	// 		case msg := <-sendMsg:
-	// 			sendMsgToESP(msg)
-	// 		}
-	// 	}
-	// }()
 	return nil
 }
 
@@ -143,7 +116,7 @@ func postUpdate(temp float64, cpu float64) {
 func sendMsgToESP(msg sensorsMsg) {
 	pbmsg := espmsg.EspReq_Msg{
 		Operation: espmsg.EspMsgType_OPSetPerf,
-		Id:   int32(rand.Intn(6)),
+		Id:   viper.GetInt32("agent.id"),
 		Op: &espmsg.EspReq_Msg_Perf{
 			Perf: &espmsg.ESPReq_SetPerf{
 				Load: float32(msg.CPU.Load),

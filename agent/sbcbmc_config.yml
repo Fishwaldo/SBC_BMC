@@ -1,0 +1,9 @@
+sbcbmc:
+  server: 10.100.201.129
+  port: 1234
+  auth: 12345678
+
+agent:
+  id: 1
+  interval: 5
+  tempsensor: "*"

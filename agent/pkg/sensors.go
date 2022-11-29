@@ -1,9 +1,12 @@
 package hostmonitor
 
 import (
+	"path/filepath"
 	"time"
-	"github.com/shirou/gopsutil/v3/load"
+
 	"github.com/shirou/gopsutil/v3/host"
+	"github.com/shirou/gopsutil/v3/load"
+	"github.com/spf13/viper"
 )
 
 var (
@@ -18,7 +21,7 @@ func StartSensors() {
 			case <- quit:
 				Log.Info("Stopping sensors Loop")
 				return
-			case <- time.After(5 * time.Second):
+			case <- time.After(time.Duration(viper.GetInt("agent.interval")) * time.Second):
 				temps, err := GetTemp()
 				if err != nil {
 					Log.Error(err, "Error getting temp")
@@ -29,6 +32,7 @@ func StartSensors() {
 					Log.Error(err, "Error getting CPU")
 					continue
 				}
+				Log.Info("Sensor Readings", "temp", temps, "cpu", cpu)
 				if (len(temps) > 0) {
 					postUpdate(temps[0].Temperature, cpu)
 				} else {
@@ -51,7 +55,15 @@ func GetTemp() ([]host.TemperatureStat, error) {
 		Log.Error(err, "Error getting host info")
 		return []host.TemperatureStat{}, err
 	}
-	return temps, nil
+	var ret []host.TemperatureStat
+	for _, temp := range temps {
+		match, _ := filepath.Match(viper.GetString("agent.tempsensor"), temp.SensorKey)
+		if  match {
+			ret = append(ret, temp)
+			Log.Info("Adding Sensor Temp", "temp", temp.SensorKey)
+		}
+	}
+	return ret, nil
 }
 
 func GetCPU() (float64, error) {

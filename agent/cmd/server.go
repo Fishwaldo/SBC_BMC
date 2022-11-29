@@ -11,39 +11,77 @@ import (
 
 	"github.com/Fishwaldo/esp32-sbcfanctrl/client/pkg"
 	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
 )
 
-// serverCmd represents the server command
-var serverCmd = &cobra.Command{
-	Use:   "server",
-	Short: "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
-
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
+// agentCmd represents the server command
+var agentCmd = &cobra.Command{
+	Use:   "agent",
+	Short: "Start the Agent Service",
+	Long: `Starts the Agent to report CPU and Load Information to the SBC Controller`,
 	Run: func(cmd *cobra.Command, args []string) {
-		hostmonitor.Log.Info("Starting server")
-		startServer()
+		startAgent()
 	},
 }
 
+var cfgFile string
+
 func init() {
-	rootCmd.AddCommand(serverCmd)
+	cobra.OnInitialize(initConfig)
+	rootCmd.AddCommand(agentCmd)
 
-	// Here you will define your flags and configuration settings.
+	rootCmd.PersistentFlags().BoolP("debug", "d", false, "Enable debug logging")
+	viper.BindPFlag("debug", rootCmd.PersistentFlags().Lookup("debug"))
+	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is /etc/sbcbmc_agent.yml)")
+	agentCmd.PersistentFlags().StringP("server", "s", "localhost", "Server to connect to")
+	viper.BindPFlag("sbcbmc.server", agentCmd.PersistentFlags().Lookup("server"))
+	agentCmd.PersistentFlags().IntP("port", "p", 1234, "Port to connect to")
+	viper.BindPFlag("sbcbmc.port", agentCmd.PersistentFlags().Lookup("port"))
 
-	// Cobra supports Persistent Flags which will work for this command
-	// and all subcommands, e.g.:
-	// serverCmd.PersistentFlags().String("foo", "", "A help for foo")
-
-	// Cobra supports local flags which will only run when this command
-	// is called directly, e.g.:
-	// serverCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+	viper.SetDefault("agent.interval", 5)
+	viper.SetDefault("agent.tempsensor", "*")
 }
 
-func startServer() {
+func initConfig() {
+	if cfgFile != "" {
+		viper.SetConfigFile(cfgFile)
+	} else {
+		// Find home directory.
+		home, err := os.UserHomeDir()
+		cobra.CheckErr(err)
+
+		// Search config in home directory with name ".cobra" (without extension).
+		viper.AddConfigPath("/etc/")
+		viper.AddConfigPath(home)
+		viper.AddConfigPath(".")
+		viper.SetConfigType("yaml")
+		viper.SetConfigName("sbcbmc_config.yml")
+	}
+
+	viper.AutomaticEnv()
+
+	if err := viper.ReadInConfig(); err == nil {
+		hostmonitor.Log.Info("Loading Config", "file", viper.ConfigFileUsed())
+	} else {
+		hostmonitor.Log.Error(err, "Error Loading Config")
+	}
+}
+
+func startAgent() {
+	hostmonitor.Log.Info("Config:", "server", viper.GetString("sbcbmc.server"), "port", viper.GetInt("sbcbmc.port"))
+	hostmonitor.Log.Info("Config:", "debug", viper.GetBool("debug"))
+
+	if len(viper.GetString("sbcbmc.auth")) > 8 {
+		hostmonitor.Log.Error(nil, "Auth Token can not be larger than 8 characters")
+		os.Exit(-1)
+	}
+	if viper.GetInt("agent.interval") < 1 {
+		hostmonitor.Log.Error(nil, "Interval must be larger than 1 second")
+		os.Exit(-1)
+	}
+
+	hostmonitor.Log.Info("Starting server")
+
 	sigs := make(chan os.Signal, 1)
 	signal.Notify(sigs, syscall.SIGINT, syscall.SIGTERM)
 	hostmonitor.StartSendServer()
